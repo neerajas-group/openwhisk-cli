@@ -28,6 +28,7 @@ import (
 const (
 	MEMORY_FLAG      = "memory"
 	LOG_SIZE_FLAG    = "logsize"
+	CPU_FLAG 		 = "cpu"
 	CONCURRENCY_FLAG = "concurrency"
 	TIMEOUT_FLAG     = "timeout"
 	WEB_FLAG         = "web"
@@ -145,6 +146,7 @@ type ActionFlags struct {
 	timeout       int
 	memory        int
 	logsize       int
+	cpu			  int
 	concurrency   int
 	result        bool
 	kind          string

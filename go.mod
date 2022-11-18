@@ -13,6 +13,7 @@ require (
 	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/neerajas-group/openwhisk-client-go v0.0.0-20221114234932-072306da38f0 // indirect
 	github.com/nicksnyder/go-i18n v1.10.1
 	github.com/onsi/ginkgo v1.15.0
 	github.com/onsi/gomega v1.10.5
