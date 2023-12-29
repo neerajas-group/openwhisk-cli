@@ -36,7 +36,7 @@ import (
 const (
 	PollInterval             = time.Second * 2
 	Delay                    = time.Second * 5
-	MAX_ACTIVATION_LIMIT     = 200
+	MAX_ACTIVATION_LIMIT     = 700
 	DEFAULT_ACTIVATION_LIMIT = 30
 )
 
