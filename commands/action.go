@@ -43,6 +43,7 @@ const (
 	TIMEOUT_LIMIT     = 60000
 	LOGSIZE_LIMIT     = 10
 	CPU_LIMIT		  = 30
+	NWBW_LIMIT		  = 500
 	CONCURRENCY_LIMIT = 1
 	ACTIVATION_ID     = "activationId"
 	WEB_EXPORT_ANNOT  = "web-export"
@@ -419,11 +420,13 @@ func parseAction(cmd *cobra.Command, args []string, update bool) (*whisk.Action,
 		cmd.LocalFlags().Changed(MEMORY_FLAG),
 		cmd.LocalFlags().Changed(LOG_SIZE_FLAG),
 		cmd.LocalFlags().Changed(CPU_FLAG),
+		cmd.LocalFlags().Changed(NWBW_FLAG),
 		cmd.LocalFlags().Changed(TIMEOUT_FLAG),
 		cmd.LocalFlags().Changed(CONCURRENCY_FLAG),
 		Flags.action.memory,
 		Flags.action.logsize,
 		Flags.action.cpu,
+		Flags.action.nwbw,
 		Flags.action.timeout,
 		Flags.action.concurrency)
 
@@ -914,10 +917,10 @@ func webSecureSecret(webSecureMode string) interface{} {
 	}
 }
 
-func getLimits(memorySet bool, logSizeSet bool, cpuSet bool, timeoutSet bool, concurrencySet bool, memory int, logSize int, cpu int, timeout int, concurrency int) *whisk.Limits {
+func getLimits(memorySet bool, logSizeSet bool, cpuSet bool, nwbwSet bool, timeoutSet bool, concurrencySet bool, memory int, logSize int, cpu int, nwbw int, timeout int, concurrency int) *whisk.Limits {
 	var limits *whisk.Limits
 
-	if memorySet || logSizeSet || cpuSet || timeoutSet || concurrencySet {
+	if memorySet || logSizeSet || cpuSet || nwbwSet || timeoutSet || concurrencySet {
 		limits = new(whisk.Limits)
 
 		if memorySet {
@@ -930,6 +933,10 @@ func getLimits(memorySet bool, logSizeSet bool, cpuSet bool, timeoutSet bool, co
 
 		if cpuSet {
 			limits.Cpu = &cpu
+		}
+		
+		if nwbwSet {
+			limits.NetworkBW = &nwbw
 		}
 
 		if timeoutSet {
@@ -1305,6 +1312,7 @@ func init() {
 	actionCreateCmd.Flags().IntVarP(&Flags.action.memory, MEMORY_FLAG, "m", MEMORY_LIMIT, wski18n.T("the maximum memory `LIMIT` in MB for the action"))
 	actionCreateCmd.Flags().IntVarP(&Flags.action.logsize, LOG_SIZE_FLAG, "l", LOGSIZE_LIMIT, wski18n.T("the maximum log size `LIMIT` in MB for the action"))
 	actionCreateCmd.Flags().IntVarP(&Flags.action.cpu, CPU_FLAG, "x", CPU_LIMIT, wski18n.T("the maximum cpu `LIMIT` in number of cores for the action"))
+	actionCreateCmd.Flags().IntVarP(&Flags.action.nwbw, NWBW_FLAG, "n", NWBW_LIMIT, wski18n.T("the maximum network bandwdith `LIMIT` in mbits for the action"))
 	actionCreateCmd.Flags().IntVarP(&Flags.action.concurrency, CONCURRENCY_FLAG, "c", CONCURRENCY_LIMIT, wski18n.T("the maximum intra-container concurrent activation `LIMIT` for the action"))
 	actionCreateCmd.Flags().StringSliceVarP(&Flags.common.annotation, "annotation", "a", nil, wski18n.T("annotation values in `KEY VALUE` format"))
 	actionCreateCmd.Flags().StringVarP(&Flags.common.annotFile, "annotation-file", "A", "", wski18n.T("`FILE` containing annotation values in JSON format"))
@@ -1323,6 +1331,7 @@ func init() {
 	actionUpdateCmd.Flags().IntVarP(&Flags.action.memory, MEMORY_FLAG, "m", MEMORY_LIMIT, wski18n.T("the maximum memory `LIMIT` in MB for the action"))
 	actionUpdateCmd.Flags().IntVarP(&Flags.action.logsize, LOG_SIZE_FLAG, "l", LOGSIZE_LIMIT, wski18n.T("the maximum log size `LIMIT` in MB for the action"))
 	actionUpdateCmd.Flags().IntVarP(&Flags.action.cpu, CPU_FLAG, "x", CPU_LIMIT, wski18n.T("the maximum cpu `LIMIT` in number of cores for the action"))
+	actionUpdateCmd.Flags().IntVarP(&Flags.action.nwbw, NWBW_FLAG, "n", NWBW_LIMIT, wski18n.T("the maximum network bandwdith `LIMIT` in mbits for the action"))
 	actionUpdateCmd.Flags().IntVarP(&Flags.action.concurrency, CONCURRENCY_FLAG, "c", CONCURRENCY_LIMIT, wski18n.T("the maximum intra-container concurrent activation `LIMIT` for the action"))
 	actionUpdateCmd.Flags().StringSliceVarP(&Flags.common.annotation, "annotation", "a", []string{}, wski18n.T("annotation values in `KEY VALUE` format"))
 	actionUpdateCmd.Flags().StringVarP(&Flags.common.annotFile, "annotation-file", "A", "", wski18n.T("`FILE` containing annotation values in JSON format"))
